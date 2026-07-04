@@ -22,6 +22,7 @@
           <h1 id="viewTitle">작은 성공</h1>
         </div>
         <button class="settings-button" id="installButton" type="button" hidden>설치</button>
+        <button class="settings-button sync-trigger" id="syncButton" type="button" aria-label="동기화">동기화</button>
         <button class="settings-button" type="button" aria-label="설정">⌘</button>
       </header>
 
@@ -168,7 +169,33 @@
       </nav>
     </div>
 
+    <dialog id="syncDialog" class="sync-dialog">
+      <form method="dialog" class="sync-panel">
+        <div class="sync-head">
+          <div>
+            <p class="eyebrow">기기 동기화</p>
+            <h2>폰과 같은 기록 쓰기</h2>
+          </div>
+          <button class="settings-button" value="close" type="submit" aria-label="닫기">×</button>
+        </div>
+        <p class="sync-copy" id="syncStatus">동기화 설정을 확인하고 있어요.</p>
+        <label class="sync-code-field">
+          <span>동기화 코드</span>
+          <input id="syncKeyInput" autocomplete="off" spellcheck="false" placeholder="PC에서 만든 코드를 폰에 붙여넣기" />
+        </label>
+        <div class="sync-actions">
+          <button class="secondary-button" id="createSyncKey" type="button">새 코드 만들기</button>
+          <button class="primary-button" id="connectSyncKey" type="button">이 코드로 연결</button>
+        </div>
+        <div class="sync-actions">
+          <button class="secondary-button" id="copySyncKey" type="button">코드 복사</button>
+          <button class="secondary-button" id="pullSyncNow" type="button">지금 불러오기</button>
+        </div>
+      </form>
+    </dialog>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./config.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

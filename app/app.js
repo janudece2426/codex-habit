@@ -1,4 +1,6 @@
 const STORAGE_KEY = "small-habit-pieces-v1";
+const SYNC_KEY_STORAGE = "small-habit-pieces-sync-key";
+const SYNC_TABLE = "habit_sync_states";
 const dateKey = (date = new Date()) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -58,6 +60,10 @@ let state = loadState();
 let currentView = "today";
 let selectedHabitId = null;
 let installPrompt = null;
+let syncKey = localStorage.getItem(SYNC_KEY_STORAGE) || "";
+let remoteUpdatedAt = "";
+let syncTimer = null;
+let isSyncing = false;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -94,6 +100,7 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  scheduleCloudSave();
 }
 
 function setView(view) {
@@ -119,6 +126,7 @@ function render() {
   renderHabits();
   renderStats();
   if (currentView === "detail") renderDetail();
+  updateSyncUi();
 }
 
 function getDoneSet(date = todayKey()) {
@@ -362,6 +370,183 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove("is-visible"), 1900);
 }
 
+function getSyncConfig() {
+  const config = window.HABIT_SYNC_CONFIG || {};
+  return {
+    url: String(config.supabaseUrl || "").replace(/\/$/, ""),
+    anonKey: String(config.supabaseAnonKey || ""),
+  };
+}
+
+function isCloudConfigured() {
+  const { url, anonKey } = getSyncConfig();
+  return Boolean(url && anonKey);
+}
+
+function getSyncHeaders(extra = {}) {
+  const { anonKey } = getSyncConfig();
+  return {
+    apikey: anonKey,
+    Authorization: `Bearer ${anonKey}`,
+    ...extra,
+  };
+}
+
+function getSyncEndpoint(key = syncKey) {
+  const { url } = getSyncConfig();
+  return `${url}/rest/v1/${SYNC_TABLE}?sync_key=eq.${encodeURIComponent(key)}`;
+}
+
+function getSyncUpsertEndpoint() {
+  const { url } = getSyncConfig();
+  return `${url}/rest/v1/${SYNC_TABLE}?on_conflict=sync_key`;
+}
+
+function normalizeRemotePayload(payload) {
+  return {
+    habits: Array.isArray(payload?.habits) ? payload.habits : [],
+    completions: payload?.completions && typeof payload.completions === "object" ? payload.completions : {},
+  };
+}
+
+async function fetchCloudState(key = syncKey) {
+  if (!isCloudConfigured() || !key) return null;
+  const response = await fetch(`${getSyncEndpoint(key)}&select=payload,updated_at`, {
+    headers: getSyncHeaders(),
+  });
+  if (!response.ok) throw new Error("동기화 데이터를 불러오지 못했어요.");
+  const rows = await response.json();
+  if (!rows.length) return null;
+  return {
+    payload: normalizeRemotePayload(rows[0].payload),
+    updatedAt: rows[0].updated_at || "",
+  };
+}
+
+async function pushCloudState() {
+  if (!isCloudConfigured() || !syncKey || isSyncing) return;
+  isSyncing = true;
+  updateSyncUi("동기화 중");
+  try {
+    const response = await fetch(getSyncUpsertEndpoint(), {
+      method: "POST",
+      headers: getSyncHeaders({
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates,return=representation",
+      }),
+      body: JSON.stringify({
+        sync_key: syncKey,
+        payload: state,
+        updated_at: new Date().toISOString(),
+      }),
+    });
+    if (!response.ok) throw new Error("동기화 저장에 실패했어요.");
+    const rows = await response.json();
+    remoteUpdatedAt = rows[0]?.updated_at || new Date().toISOString();
+    updateSyncUi("동기화됨");
+  } catch (error) {
+    updateSyncUi("동기화 실패");
+    showToast(error.message);
+  } finally {
+    isSyncing = false;
+  }
+}
+
+function scheduleCloudSave() {
+  if (!isCloudConfigured() || !syncKey) {
+    updateSyncUi();
+    return;
+  }
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushCloudState, 500);
+}
+
+function generateSyncKey() {
+  return crypto.randomUUID().replaceAll("-", "").slice(0, 16);
+}
+
+async function connectSyncKey(key) {
+  const nextKey = key.trim();
+  if (!nextKey) {
+    showToast("동기화 코드를 입력해줘.");
+    return;
+  }
+  if (!isCloudConfigured()) {
+    showToast("Supabase 설정을 먼저 넣어야 해요.");
+    updateSyncUi();
+    return;
+  }
+
+  try {
+    const remote = await fetchCloudState(nextKey);
+    syncKey = nextKey;
+    localStorage.setItem(SYNC_KEY_STORAGE, syncKey);
+    $("#syncKeyInput").value = syncKey;
+
+    if (remote) {
+      state = remote.payload;
+      remoteUpdatedAt = remote.updatedAt;
+      saveState();
+      render();
+      showToast("동기화 데이터를 불러왔어요.");
+    } else {
+      await pushCloudState();
+      showToast("새 동기화 공간을 만들었어요.");
+    }
+    updateSyncUi();
+  } catch (error) {
+    showToast(error.message);
+    updateSyncUi("연결 실패");
+  }
+}
+
+async function pullCloudState() {
+  if (!syncKey) {
+    showToast("먼저 동기화 코드를 연결해줘.");
+    return;
+  }
+  try {
+    const remote = await fetchCloudState(syncKey);
+    if (!remote) {
+      showToast("아직 저장된 동기화 데이터가 없어요.");
+      return;
+    }
+    state = remote.payload;
+    remoteUpdatedAt = remote.updatedAt;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    render();
+    showToast("클라우드 기록을 불러왔어요.");
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+function updateSyncUi(status = "") {
+  const button = $("#syncButton");
+  const statusText = $("#syncStatus");
+  const input = $("#syncKeyInput");
+  if (!button || !statusText || !input) return;
+
+  input.value = syncKey;
+  button.classList.toggle("is-connected", Boolean(syncKey && isCloudConfigured()));
+
+  if (!isCloudConfigured()) {
+    button.textContent = "동기화 설정";
+    statusText.textContent = "Supabase URL과 anon key를 config.js에 넣으면 PC와 폰을 연결할 수 있어요.";
+    return;
+  }
+
+  if (!syncKey) {
+    button.textContent = "동기화";
+    statusText.textContent = "새 코드를 만들거나, 다른 기기에서 만든 코드를 입력해줘.";
+    return;
+  }
+
+  button.textContent = "동기화됨";
+  const time = remoteUpdatedAt ? new Intl.DateTimeFormat("ko-KR", { dateStyle: "short", timeStyle: "short" }).format(new Date(remoteUpdatedAt)) : "";
+  statusText.textContent = status ? `${status}${time ? ` · ${time}` : ""}` : `연결된 코드로 기록을 맞추고 있어요${time ? ` · ${time}` : ""}.`;
+}
+
 function celebrate(sourceElement) {
   createBurst(sourceElement);
   showToast("좋아요. 오늘의 작은 조각 하나 완료");
@@ -441,7 +626,38 @@ $("#installButton").addEventListener("click", async () => {
   $("#installButton").hidden = true;
 });
 
-  if ("serviceWorker" in navigator) {
+$("#syncButton").addEventListener("click", () => {
+  $("#syncDialog").showModal();
+  updateSyncUi();
+});
+
+$("#createSyncKey").addEventListener("click", async () => {
+  const nextKey = generateSyncKey();
+  $("#syncKeyInput").value = nextKey;
+  await connectSyncKey(nextKey);
+});
+
+$("#connectSyncKey").addEventListener("click", async () => {
+  await connectSyncKey($("#syncKeyInput").value);
+});
+
+$("#copySyncKey").addEventListener("click", async () => {
+  if (!syncKey) {
+    showToast("복사할 동기화 코드가 없어요.");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(syncKey);
+    showToast("동기화 코드를 복사했어요.");
+  } catch {
+    $("#syncKeyInput").select();
+    showToast("코드를 선택했어요. 직접 복사해줘.");
+  }
+});
+
+$("#pullSyncNow").addEventListener("click", pullCloudState);
+
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js");
   });
@@ -463,5 +679,12 @@ $("#habitCategory").addEventListener("change", () => {
   syncCategoryChoice($("#habitCategory").value);
 });
 
+async function initSync() {
+  updateSyncUi();
+  if (!isCloudConfigured() || !syncKey) return;
+  await pullCloudState();
+}
+
 resetForm();
 setView("today");
+initSync();

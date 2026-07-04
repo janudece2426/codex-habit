@@ -1,8 +1,9 @@
-const CACHE_NAME = "small-habit-pieces-v5";
+const CACHE_NAME = "small-habit-pieces-v6";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./config.js",
   "./app.js",
   "./manifest.webmanifest",
   "./icon.svg",

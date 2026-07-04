@@ -150,7 +150,7 @@ h2 {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: 36px 38px minmax(0, 1fr) auto auto;
+  grid-template-columns: 36px 38px minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 8px;
   min-height: 66px;
@@ -184,6 +184,16 @@ h2 {
 .icon-button:hover {
   background: var(--surface-mid);
   transform: translateY(-2px);
+}
+
+.sync-trigger {
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.sync-trigger.is-connected {
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
 .avatar {
@@ -852,6 +862,64 @@ textarea {
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
+.sync-dialog {
+  width: min(92vw, 420px);
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  color: var(--text);
+}
+
+.sync-dialog::backdrop {
+  background: rgba(27, 28, 25, 0.28);
+  backdrop-filter: blur(6px);
+}
+
+.sync-panel {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--background);
+  box-shadow: 0 24px 70px rgba(22, 45, 37, 0.22);
+}
+
+.sync-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sync-copy {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.sync-code-field {
+  display: grid;
+  gap: 8px;
+}
+
+.sync-code-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.sync-code-field input {
+  font-family: ui-monospace, "SFMono-Regular", monospace;
+  letter-spacing: 0.04em;
+}
+
+.sync-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .burst-particle {
   position: fixed;
   z-index: 80;
@@ -944,7 +1012,7 @@ textarea {
 
   .app-header {
     position: relative;
-    grid-template-columns: 44px minmax(0, 1fr) auto auto;
+    grid-template-columns: 44px minmax(0, 1fr) auto auto auto;
     min-height: 86px;
     padding: 22px 34px 16px 118px;
     border-bottom: 1px solid rgba(217, 225, 220, 0.72);
@@ -1084,7 +1152,7 @@ textarea {
 
 @media (max-width: 380px) {
   .app-header {
-    grid-template-columns: 30px 34px minmax(0, 1fr) auto auto;
+    grid-template-columns: 30px 34px minmax(0, 1fr) auto auto auto;
     padding-inline: 12px;
   }
 
