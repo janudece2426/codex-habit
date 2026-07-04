@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>나의 성장</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fbf9f4",
+                        "secondary": "#416182",
+                        "tertiary-container": "#ffae6f",
+                        "on-primary-fixed-variant": "#00513c",
+                        "outline-variant": "#bdc9c2",
+                        "outline": "#6e7a74",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#002116",
+                        "secondary-fixed-dim": "#a9c9f0",
+                        "on-background": "#1b1c19",
+                        "on-secondary-fixed-variant": "#284969",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "inverse-surface": "#30312e",
+                        "on-tertiary-fixed": "#2f1400",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d0e4ff",
+                        "surface-dim": "#dbdad5",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001d35",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdcc4",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-secondary-container": "#3e5e7f",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#005943",
+                        "surface-tint": "#006c51",
+                        "background": "#fbf9f4",
+                        "primary": "#006c51",
+                        "on-tertiary-container": "#7a3f02",
+                        "surface-variant": "#e4e2dd",
+                        "on-surface-variant": "#3e4944",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#99f4d1",
+                        "tertiary": "#8e4e14",
+                        "primary-fixed-dim": "#7dd8b5",
+                        "inverse-primary": "#7dd8b5",
+                        "primary-container": "#76d1af",
+                        "surface-container-high": "#eae8e3",
+                        "surface-container": "#f0eee9",
+                        "surface-container-low": "#f5f3ee",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#b7d7fe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e4e2dd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-lg": "40px",
+                        "margin-mobile": "24px",
+                        "gutter": "16px",
+                        "stack-md": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .shadow-soft {
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+        }
+        .bar-grow {
+            animation: growUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transform-origin: bottom;
+            transform: scaleY(0);
+        }
+        @keyframes growUp {
+            to { transform: scaleY(1); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="antialiased font-body-md min-h-screen flex flex-col pt-16 pb-24 relative overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-background dark:bg-background flex justify-between items-center px-margin-mobile h-16 w-full z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="A close-up portrait of a serene individual, softly lit against a minimalist, warm neutral background, embodying a calm and approachable 'Small Wins' aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1t1DcWwKxN_FHhb2UmTE_StZsguRMFrDpa3dhASM1aFl7zCEeBFvhKa169jZoKJhdzPbGRC5MZIwi-iNW_T4exFGAz70zK_d4cMVzTQRYqLc_y8DalVK-Zu34qUxxriGo07IEVaOnRyXZYDGUQqqWq47hELEIsfYiFcsytV70abID8je06ZD5sdV4jtzGnC99kNdyxRMNfYDHu62eFdHk0HqZht4TPzgMZDN6YXfU3T4aRnKKGX4w"/>
+</div>
+<h1 class="font-display text-headline-md text-primary dark:text-primary-fixed">나의 성장</h1>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-margin-mobile pt-stack-md flex flex-col gap-stack-lg relative z-10 max-w-2xl mx-auto w-full">
+<!-- Summary Bento Box -->
+<section class="grid grid-cols-2 gap-stack-sm">
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft flex flex-col justify-between aspect-square">
+<div>
+<span class="material-symbols-outlined text-tertiary-container mb-2" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<h2 class="font-label-md text-on-surface-variant">연속 달성일</h2>
+</div>
+<div>
+<p class="font-display text-display text-on-surface">12</p>
+<p class="font-label-sm text-secondary">지금처럼 계속해봐요!</p>
+</div>
+</div>
+<div class="bg-primary rounded-2xl p-6 shadow-soft flex flex-col justify-between aspect-square text-on-primary relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+<div>
+<span class="material-symbols-outlined text-primary-fixed mb-2" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<h2 class="font-label-md text-primary-container">마이크로 습관</h2>
+</div>
+<div>
+<p class="font-display text-display">48</p>
+<p class="font-label-sm text-primary-fixed-dim">이번 주 완료</p>
+</div>
+</div>
+</section>
+<!-- Bar Chart Section -->
+<section class="bg-surface-container-lowest rounded-2xl p-6 shadow-soft">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="font-headline-md text-on-surface">주간 흐름</h2>
+<p class="font-body-md text-on-surface-variant">꾸준한 흐름을 유지하고 있어요.</p>
+</div>
+<div class="px-3 py-1 bg-secondary-container rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-on-secondary-container text-sm" style="font-variation-settings: 'FILL' 0;">trending_up</span>
+<span class="font-label-sm text-on-secondary-container">+15%</span>
+</div>
+</div>
+<!-- Chart Container -->
+<div class="h-48 flex items-end justify-between gap-2 pt-4 relative border-b border-surface-variant">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8">
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant/50"></div>
+</div>
+<!-- Bars -->
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-primary-container rounded-t-lg bar-grow relative transition-colors group-hover:bg-primary-fixed" style="height: 40%; animation-delay: 0.1s;"></div>
+<span class="font-label-sm text-on-surface-variant">월</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-primary-container rounded-t-lg bar-grow relative transition-colors group-hover:bg-primary-fixed" style="height: 60%; animation-delay: 0.2s;"></div>
+<span class="font-label-sm text-on-surface-variant">화</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg bar-grow relative shadow-[0_0_15px_rgba(0,108,81,0.3)]" style="height: 85%; animation-delay: 0.3s;">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-tertiary-container rounded-full"></div>
+</div>
+<span class="font-label-sm text-on-surface font-semibold">수</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-primary-container rounded-t-lg bar-grow relative transition-colors group-hover:bg-primary-fixed" style="height: 50%; animation-delay: 0.4s;"></div>
+<span class="font-label-sm text-on-surface-variant">목</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-primary-container rounded-t-lg bar-grow relative transition-colors group-hover:bg-primary-fixed" style="height: 70%; animation-delay: 0.5s;"></div>
+<span class="font-label-sm text-on-surface-variant">금</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-surface-variant rounded-t-lg bar-grow relative transition-colors group-hover:bg-outline-variant" style="height: 30%; animation-delay: 0.6s;"></div>
+<span class="font-label-sm text-outline">토</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-end h-full gap-2 relative z-10 group">
+<div class="w-full max-w-[40px] bg-surface-variant rounded-t-lg bar-grow relative transition-colors group-hover:bg-outline-variant" style="height: 10%; animation-delay: 0.7s;"></div>
+<span class="font-label-sm text-outline">일</span>
+</div>
+</div>
+</section>
+<!-- Encouragement Message -->
+<section class="bg-surface-container-low rounded-2xl p-6 flex items-center gap-4 border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">celebration</span>
+</div>
+<div>
+<h3 class="font-headline-md text-on-surface text-lg">정말 잘하고 있어요!</h3>
+<p class="font-body-md text-on-surface-variant text-sm mt-1">지난 수요일은 최고의 날이었어요. 작은 성공들을 계속 쌓아나가 보세요.</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-3 bg-surface-container-lowest dark:bg-surface-container-lowest shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200 min-w-[64px] min-h-[48px] rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+<span class="font-label-sm text-label-sm">오늘</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200 min-w-[64px] min-h-[48px] rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">list_alt</span>
+<span class="font-label-sm text-label-sm">습관</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200 min-w-[64px] min-h-[48px] rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">add_circle</span>
+<span class="font-label-sm text-label-sm">추가</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed bg-primary-container/20 rounded-full px-4 py-1 hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200 min-w-[64px] min-h-[48px]" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm text-label-sm">통계</span>
+</a>
+</nav>
+</body></html>

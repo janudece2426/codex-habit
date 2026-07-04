@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Small Wins - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fbf9f4",
+                        "secondary": "#416182",
+                        "tertiary-container": "#ffae6f",
+                        "on-primary-fixed-variant": "#00513c",
+                        "outline-variant": "#bdc9c2",
+                        "outline": "#6e7a74",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#002116",
+                        "secondary-fixed-dim": "#a9c9f0",
+                        "on-background": "#1b1c19",
+                        "on-secondary-fixed-variant": "#284969",
+                        "tertiary-fixed-dim": "#ffb780",
+                        "inverse-surface": "#30312e",
+                        "on-tertiary-fixed": "#2f1400",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d0e4ff",
+                        "surface-dim": "#dbdad5",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001d35",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdcc4",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-secondary-container": "#3e5e7f",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#005943",
+                        "surface-tint": "#006c51",
+                        "background": "#fbf9f4",
+                        "primary": "#006c51",
+                        "on-tertiary-container": "#7a3f02",
+                        "surface-variant": "#e4e2dd",
+                        "on-surface-variant": "#3e4944",
+                        "on-tertiary-fixed-variant": "#6f3800",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#99f4d1",
+                        "tertiary": "#8e4e14",
+                        "primary-fixed-dim": "#7dd8b5",
+                        "inverse-primary": "#7dd8b5",
+                        "primary-container": "#76d1af",
+                        "surface-container-high": "#eae8e3",
+                        "surface-container": "#f0eee9",
+                        "surface-container-low": "#f5f3ee",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#b7d7fe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e4e2dd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-lg": "40px",
+                        "margin-mobile": "24px",
+                        "gutter": "16px",
+                        "stack-md": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "display": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .habit-card {
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .habit-card:active {
+            transform: scale(0.98);
+        }
+        /* Custom Pulse Animation */
+        @keyframes pulse-success {
+            0% { box-shadow: 0 0 0 0 rgba(118, 209, 175, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(118, 209, 175, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(118, 209, 175, 0); }
+        }
+        .pulse-active {
+            animation: pulse-success 0.5s ease-out;
+        }
+        
+        /* Confetti Styles */
+        .confetti-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col pb-24 font-body-md antialiased">
+<!-- TopAppBar JSON execution -->
+<header class="fixed top-0 w-full bg-background dark:bg-background flex justify-between items-center px-margin-mobile h-16 z-50 flat no shadows">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A vibrant, modern profile photo of a user in a well-lit indoor environment. Soft, natural lighting. The user is smiling warmly. The image style is clean, minimal, and aspirational, fitting for a modern self-improvement app. Shot with a slight depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmKyjYtRhTiOOsnPQDlM445bkfkRs6GnFj1MSH3JT-NVRrsb-BlYygcGmx5FQXmg4vpsP7J9H5OgTg6CPgQdkr1VbnKtyT-Kp0DSd5rl7q_crb16gn8UOSom_LEMtJfQPnj44PGKGYDfU-bVkXoci80uAo4UbAO2B-J3M5JbIIMepuqS3cUt6R97vdcxOLAArBoXE617OogFH39XIWropX8nPdSzWCrhJO1aS5JA366CC1Fv4Per68"/>
+<h1 class="font-display text-headline-md text-primary dark:text-primary-fixed">작은 성공</h1>
+</div>
+<button class="scale-95 active:scale-90 transition-transform text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin-mobile pt-24 pb-stack-lg max-w-lg mx-auto w-full">
+<!-- Daily Focus Ring Section -->
+<section class="flex flex-col items-center justify-center mb-stack-lg">
+<div class="relative w-48 h-48 flex items-center justify-center mb-4">
+<!-- SVG Progress Ring -->
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="progress-ring__circle text-primary-fixed-dim stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="80" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<!-- Center Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-display text-display text-primary">68%</span>
+<span class="font-label-md text-label-md text-secondary mt-1">오늘의 집중</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center max-w-[250px]">멋진 흐름이에요! 오늘 계획한 작은 습관들이 얼마 남지 않았어요.</p>
+</section>
+<!-- Habit List -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">오후의 리듬</h2>
+<!-- Habit 1: Completed -->
+<div class="habit-card bg-surface-container-lowest rounded-[16px] p-4 flex items-center justify-between border border-transparent">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="water_drop">water_drop</span>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface line-through text-opacity-50">물 한 잔 마시기</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">3일째</span>
+</div>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary scale-95 active:scale-90 transition-transform" onclick="toggleHabit(this)">
+<span class="material-symbols-outlined text-[20px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+</div>
+<!-- Habit 2: Pending -->
+<div class="habit-card bg-surface-container-lowest rounded-[16px] p-4 flex items-center justify-between border border-transparent">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface">책 1쪽 읽기</h3>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center text-transparent hover:border-primary transition-colors scale-95 active:scale-90" onclick="toggleHabit(this, true)">
+<span class="material-symbols-outlined text-[20px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+</div>
+<!-- Habit 3: Pending -->
+<div class="habit-card bg-surface-container-lowest rounded-[16px] p-4 flex items-center justify-between border border-transparent">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="accessibility_new">accessibility_new</span>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg text-on-surface">1분간 스트레칭하기</h3>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center text-transparent hover:border-primary transition-colors scale-95 active:scale-90" onclick="toggleHabit(this, true)">
+<span class="material-symbols-outlined text-[20px]" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar JSON execution -->
+<!-- "Today" is active since this is the primary dashboard/daily focus screen -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-8 pt-3 bg-surface-container-lowest dark:bg-surface-container-lowest shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-xl md:hidden">
+<!-- Today (Active) -->
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed bg-primary-container/20 rounded-full px-4 py-1 hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm mt-1">오늘</span>
+</button>
+<!-- Habits (Inactive) -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-label-sm text-label-sm mt-1">습관</span>
+</button>
+<!-- Add (Inactive, styled slightly differently to stand out as primary action if desired, but sticking to JSON inactive style) -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[32px] mb-[-4px]" data-icon="add_circle">add_circle</span>
+<span class="font-label-sm text-label-sm mt-1">추가</span>
+</button>
+<!-- Stats (Inactive) -->
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high transition-all scale-98 active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-sm text-label-sm mt-1">통계</span>
+</button>
+</nav>
+<script>
+        function createConfetti(btn) {
+            const rect = btn.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            const colors = ['#006c51', '#7dd8b5', '#ffae6f', '#a9c9f0', '#ffb780', '#d0e4ff'];
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'confetti-particle';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.backgroundColor = color;
+                
+                // Random start spread around button
+                const startX = x + (Math.random() - 0.5) * 40;
+                const startY = y + (Math.random() - 0.5) * 40;
+                
+                // Random fall distance and spread
+                const endX = startX + (Math.random() - 0.5) * 200;
+                const endY = startY + Math.random() * 200 + 100;
+                
+                particle.style.left = startX + 'px';
+                particle.style.top = startY + 'px';
+                
+                document.body.appendChild(particle);
+                
+                const duration = Math.random() * 1000 + 800; // 0.8s to 1.8s
+                
+                particle.animate([
+                    { transform: 'translate(0, 0) rotate(0deg) scale(1)', opacity: 1 },
+                    { transform: `translate(${endX - startX}px, ${endY - startY}px) rotate(${Math.random() * 720}deg) scale(0.5)`, opacity: 0 }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.25, 1, 0.5, 1)', // ease-out style
+                    fill: 'forwards'
+                });
+                
+                // Cleanup
+                setTimeout(() => {
+                    particle.remove();
+                }, duration);
+            }
+        }
+
+        function toggleHabit(btn, animate) {
+            // Simple interaction logic for demonstration
+            const isCompleted = btn.classList.contains('bg-primary');
+            
+            if (isCompleted) {
+                // Revert to pending
+                btn.className = "w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center text-transparent hover:border-primary transition-colors scale-95 active:scale-90";
+                
+                // Revert title styling
+                const title = btn.parentElement.querySelector('h3');
+                title.classList.remove('line-through', 'text-opacity-50');
+                
+                // Revert icon bg
+                const iconBg = btn.parentElement.querySelector('.w-10');
+                iconBg.classList.replace('bg-primary-container/20', 'bg-surface-variant');
+                iconBg.classList.replace('text-primary', 'text-on-surface-variant');
+
+            } else {
+                // Mark complete
+                btn.className = "w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary scale-95 active:scale-90 transition-transform pulse-active";
+                
+                // Remove pulse class after animation
+                setTimeout(() => {
+                    btn.classList.remove('pulse-active');
+                }, 500);
+                
+                // Trigger confetti animation
+                createConfetti(btn);
+
+                // Style title
+                const title = btn.parentElement.querySelector('h3');
+                title.classList.add('line-through', 'text-opacity-50');
+
+                // Style icon bg
+                const iconBg = btn.parentElement.querySelector('.w-10');
+                iconBg.classList.replace('bg-surface-variant', 'bg-primary-container/20');
+                iconBg.classList.replace('text-on-surface-variant', 'text-primary');
+            }
+        }
+    </script>
+</body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fbf9f4" />
+    <meta name="description" content="작은 습관을 만들고 매일 기록하는 반응형 습관 앱" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>작은 습관 조각</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">본문으로 이동</a>
+
+    <div id="app" class="app-shell">
+      <header class="app-header">
+        <button class="back-button" data-view-target="today" type="button" aria-label="뒤로">‹</button>
+        <div class="avatar" aria-hidden="true">🌿</div>
+        <div class="title-wrap">
+          <p class="screen-date" id="todayLabel"></p>
+          <h1 id="viewTitle">작은 성공</h1>
+        </div>
+        <button class="settings-button" id="installButton" type="button" hidden>설치</button>
+        <button class="settings-button" type="button" aria-label="설정">⌘</button>
+      </header>
+
+      <main class="main-panel" id="mainContent">
+        <section id="todayView" class="view is-visible" aria-labelledby="viewTitle">
+          <div class="today-progress">
+            <div class="progress-ring" aria-label="오늘 진행률">
+              <svg viewBox="0 0 120 120">
+                <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                <circle class="ring-value" id="ringValue" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div class="ring-center">
+                <strong id="ringText">0%</strong>
+                <span>오늘의 성공</span>
+              </div>
+            </div>
+            <strong id="todayPercent" class="sr-only">0%</strong>
+            <p id="todayMessage">작은 시작을 기다리고 있어요.</p>
+          </div>
+
+          <div class="section-head">
+            <h2>오늘의 리듬</h2>
+            <button class="icon-pill" data-view-target="add" type="button">+</button>
+          </div>
+          <div id="todayList" class="habit-list"></div>
+        </section>
+
+        <section id="habitsView" class="view" aria-labelledby="viewTitle">
+          <div class="toolbar">
+            <label class="search-box">
+              <span>검색</span>
+              <input id="searchInput" type="search" placeholder="습관 이름 검색" />
+            </label>
+            <select id="categoryFilter" aria-label="카테고리 필터">
+              <option value="all">전체</option>
+              <option value="health">건강</option>
+              <option value="mind">마음</option>
+              <option value="study">공부</option>
+              <option value="life">생활</option>
+            </select>
+          </div>
+          <div id="habitList" class="habit-grid"></div>
+        </section>
+
+        <section id="addView" class="view" aria-labelledby="viewTitle">
+          <form id="habitForm" class="form-panel">
+            <input type="hidden" id="editingId" />
+            <label>
+              <span>습관 목표</span>
+              <input id="habitName" maxlength="32" required placeholder="나는 뭘 하고 싶어요..." />
+            </label>
+            <label>
+              <span>바로 시작할 첫 조각</span>
+              <input id="habitMicro" maxlength="44" required placeholder="예: 운동화 현관에 두기" />
+            </label>
+
+            <fieldset class="category-field">
+              <legend>카테고리</legend>
+              <label>
+                <input type="radio" name="categoryChoice" value="health" checked />
+                <span>건강</span>
+              </label>
+              <label>
+                <input type="radio" name="categoryChoice" value="mind" />
+                <span>마음</span>
+              </label>
+              <label>
+                <input type="radio" name="categoryChoice" value="study" />
+                <span>자기계발</span>
+              </label>
+            </fieldset>
+
+            <div class="form-row">
+              <label>
+                <span>카테고리</span>
+                <select id="habitCategory">
+                  <option value="health">건강</option>
+                  <option value="mind">마음</option>
+                  <option value="study">공부</option>
+                  <option value="life">생활</option>
+                </select>
+              </label>
+              <label>
+                <span>목표 시간</span>
+                <input id="habitTime" type="time" value="09:00" />
+              </label>
+            </div>
+
+            <label>
+              <span>작게 나눈 순서</span>
+              <textarea id="habitSteps" rows="4" placeholder="한 줄에 하나씩 적어줘&#10;신발끈 묶기&#10;현관문 열기&#10;5분만 걷기"></textarea>
+            </label>
+
+            <div class="reminder-row">
+              <div>
+                <strong>부드러운 알림</strong>
+                <span>예정 시간에 살짝 알려줄게요</span>
+              </div>
+              <span class="switch" aria-hidden="true"></span>
+            </div>
+
+            <div class="form-actions">
+              <button class="secondary-button" id="cancelEdit" type="button">취소</button>
+              <button class="primary-button" type="submit">작은 습관 저장하기</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="detailView" class="view" aria-labelledby="viewTitle">
+          <div id="detailPanel"></div>
+        </section>
+
+        <section id="statsView" class="view" aria-labelledby="viewTitle">
+          <div class="stats-grid">
+            <article class="stat-card warm">
+              <span>연속 달성</span>
+              <strong id="streakStat">0일</strong>
+            </article>
+            <article class="stat-card green">
+              <span>전체 완료</span>
+              <strong id="totalStat">0회</strong>
+            </article>
+            <article class="stat-card">
+              <span>등록 습관</span>
+              <strong id="habitStat">0개</strong>
+            </article>
+          </div>
+
+          <div class="chart-panel">
+            <div class="section-head compact">
+              <h2>주간 흐름</h2>
+              <span class="growth-chip">+15%</span>
+            </div>
+            <div id="weekChart" class="week-chart"></div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="하단 메뉴">
+        <button class="nav-item is-active" data-view="today" type="button"><span>◎</span>오늘</button>
+        <button class="nav-item" data-view="habits" type="button"><span>▦</span>습관</button>
+        <button class="nav-item" data-view="add" type="button"><span>＋</span>추가</button>
+        <button class="nav-item" data-view="stats" type="button"><span>▣</span>통계</button>
+      </nav>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

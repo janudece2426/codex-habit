@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>새로운 작은 습관 - Small Wins</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#fbf9f4",
+                      "secondary": "#416182",
+                      "tertiary-container": "#ffae6f",
+                      "on-primary-fixed-variant": "#00513c",
+                      "outline-variant": "#bdc9c2",
+                      "outline": "#6e7a74",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#002116",
+                      "secondary-fixed-dim": "#a9c9f0",
+                      "on-background": "#1b1c19",
+                      "on-secondary-fixed-variant": "#284969",
+                      "tertiary-fixed-dim": "#ffb780",
+                      "inverse-surface": "#30312e",
+                      "on-tertiary-fixed": "#2f1400",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#d0e4ff",
+                      "surface-dim": "#dbdad5",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed": "#001d35",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#ffdcc4",
+                      "inverse-on-surface": "#f2f1ec",
+                      "on-secondary-container": "#3e5e7f",
+                      "on-surface": "#1b1c19",
+                      "on-primary-container": "#005943",
+                      "surface-tint": "#006c51",
+                      "background": "#fbf9f4",
+                      "primary": "#006c51",
+                      "on-tertiary-container": "#7a3f02",
+                      "surface-variant": "#e4e2dd",
+                      "on-surface-variant": "#3e4944",
+                      "on-tertiary-fixed-variant": "#6f3800",
+                      "surface-bright": "#fbf9f4",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#99f4d1",
+                      "tertiary": "#8e4e14",
+                      "primary-fixed-dim": "#7dd8b5",
+                      "inverse-primary": "#7dd8b5",
+                      "primary-container": "#76d1af",
+                      "surface-container-high": "#eae8e3",
+                      "surface-container": "#f0eee9",
+                      "surface-container-low": "#f5f3ee",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#b7d7fe",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e4e2dd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "12px",
+                      "stack-lg": "40px",
+                      "margin-mobile": "24px",
+                      "gutter": "16px",
+                      "stack-md": "24px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        /* Custom styles for soft minimalism */
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .floating-input {
+            transition: all 0.2s ease;
+        }
+        
+        .floating-input:focus + label,
+        .floating-input:not(:placeholder-shown) + label {
+            transform: translateY(-20px) scale(0.85);
+            color: theme('colors.primary');
+        }
+
+        .category-radio:checked + div {
+            border-color: theme('colors.primary');
+            background-color: theme('colors.primary-container');
+            color: theme('colors.on-primary-container');
+        }
+        
+        .category-radio:checked + div .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Soft toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: theme('colors.primary');
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: theme('colors.primary');
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col pt-16 pb-24 font-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-background dark:bg-background z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-gutter">
+<button aria-label="Go back" class="w-12 h-12 flex items-center justify-center -ml-3 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-on-background">새로운 작은 습관</h1>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin-mobile pt-stack-md flex flex-col gap-stack-lg max-w-2xl mx-auto w-full">
+<!-- Goal Section -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-label-md text-label-md text-on-surface-variant">최종 목표</h2>
+<div class="relative group">
+<input class="floating-input w-full bg-[#F0EDE7] border-0 rounded-xl px-4 pt-6 pb-2 text-on-background font-body-lg text-body-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-colors h-16" id="goal-input" placeholder=" " type="text"/>
+<label class="absolute left-4 top-5 text-on-surface-variant font-body-md text-body-md transition-all pointer-events-none origin-left" for="goal-input">나는 ~을 하고 싶어요...</label>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70 pl-1">예: 마라톤 완주, 책 쓰기, 숙면 취하기</p>
+</section>
+<!-- Micro-Habit Section -->
+<section class="flex flex-col gap-stack-sm">
+<div class="flex items-center justify-between">
+<h2 class="font-label-md text-label-md text-on-surface-variant">작게 만들기 (마이크로 습관)</h2>
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant" title="A micro-habit takes less than 2 minutes">
+<span class="material-symbols-outlined text-[14px]" data-icon="info">info</span>
+</div>
+</div>
+<div class="relative group">
+<input class="floating-input w-full bg-[#F0EDE7] border-0 rounded-xl px-4 pt-6 pb-2 text-on-background font-body-lg text-body-lg focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-colors h-16" id="tiny-input" placeholder=" " type="text"/>
+<label class="absolute left-4 top-5 text-on-surface-variant font-body-md text-body-md transition-all pointer-events-none origin-left" for="tiny-input">그래서 오늘은 딱 이것만...</label>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70 pl-1">예: 운동화 신기, 빈 문서 열기</p>
+</section>
+<!-- Category Section (Bento style grid) -->
+<section class="flex flex-col gap-stack-sm">
+<h2 class="font-label-md text-label-md text-on-surface-variant">카테고리</h2>
+<div class="grid grid-cols-3 gap-gutter">
+<label class="relative cursor-pointer h-24">
+<input checked="" class="category-radio sr-only" name="category" type="radio" value="health"/>
+<div class="absolute inset-0 bg-surface-container-lowest rounded-2xl border-2 border-transparent flex flex-col items-center justify-center gap-2 transition-all shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_0_rgba(0,0,0,0.08)] active:scale-95">
+<span class="material-symbols-outlined text-[28px] text-secondary" data-icon="favorite">favorite</span>
+<span class="font-label-sm text-label-sm">건강</span>
+</div>
+</label>
+<label class="relative cursor-pointer h-24">
+<input class="category-radio sr-only" name="category" type="radio" value="mind"/>
+<div class="absolute inset-0 bg-surface-container-lowest rounded-2xl border-2 border-transparent flex flex-col items-center justify-center gap-2 transition-all shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_0_rgba(0,0,0,0.08)] active:scale-95">
+<span class="material-symbols-outlined text-[28px] text-secondary" data-icon="psychology">psychology</span>
+<span class="font-label-sm text-label-sm">마음</span>
+</div>
+</label>
+<label class="relative cursor-pointer h-24">
+<input class="category-radio sr-only" name="category" type="radio" value="work"/>
+<div class="absolute inset-0 bg-surface-container-lowest rounded-2xl border-2 border-transparent flex flex-col items-center justify-center gap-2 transition-all shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_0_rgba(0,0,0,0.08)] active:scale-95">
+<span class="material-symbols-outlined text-[28px] text-secondary" data-icon="work">work</span>
+<span class="font-label-sm text-label-sm">자기계발</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Settings Section -->
+<section class="flex flex-col gap-stack-sm bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_20px_0_rgba(0,0,0,0.04)]">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md text-on-background font-medium">부드러운 알림</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">매일 오전 9시에 알림</p>
+</div>
+</div>
+<!-- Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out border-surface-container-highest" id="toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-200 ease-in-out" for="toggle"></label>
+</div>
+</div>
+</section>
+<!-- Spacer for FAB -->
+<div class="h-20"></div>
+</main>
+<!-- Floating Action Button (Save) -->
+<div class="fixed bottom-0 left-0 w-full p-margin-mobile bg-gradient-to-t from-background via-background to-transparent pb-8 pt-12 z-40 flex justify-center">
+<button class="w-full max-w-md h-14 bg-primary text-on-primary rounded-full font-label-md text-label-md flex items-center justify-center gap-2 shadow-lg hover:bg-surface-tint transition-all scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+            작은 습관 저장하기
+        </button>
+</div>
+</body></html>

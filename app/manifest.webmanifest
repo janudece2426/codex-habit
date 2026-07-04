@@ -1,0 +1,18 @@
+{
+  "name": "작은 습관 조각",
+  "short_name": "작은습관",
+  "description": "작은 습관을 만들고 매일 기록하는 반응형 습관 앱",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fbf9f4",
+  "theme_color": "#006c51",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
