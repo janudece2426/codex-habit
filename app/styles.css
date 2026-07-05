@@ -1,10 +1,10 @@
 :root {
   color-scheme: light;
-  --background: #fbf9f4;
+  --background: #e0f8eb;
   --surface: #fffefa;
-  --surface-low: #f5f3ee;
-  --surface-mid: #f0eee9;
-  --surface-high: #eae8e3;
+  --surface-low: #f6f6f0;
+  --surface-mid: #edf6f1;
+  --surface-high: #e2eee8;
   --primary: #006c51;
   --primary-soft: #99f4d1;
   --primary-mid: #76d1af;
@@ -13,12 +13,12 @@
   --warm: #ffae6f;
   --text: #1b1c19;
   --muted: #617069;
-  --line: #d9e1dc;
+  --line: #d5e7de;
   --danger: #b64040;
   --font-display: "Plus Jakarta Sans", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --font-body: "Be Vietnam Pro", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --shadow-soft: 0 18px 50px rgba(22, 45, 37, 0.1);
-  --shadow-card: 0 10px 26px rgba(25, 54, 45, 0.08);
+  --shadow-soft: 0 14px 36px rgba(22, 45, 37, 0.07);
+  --shadow-card: 0 7px 18px rgba(25, 54, 45, 0.055);
   --spring: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -35,8 +35,10 @@ body {
   min-height: 100%;
   margin: 0;
   background:
-    radial-gradient(circle, rgba(27, 28, 25, 0.08) 1px, transparent 1px) 0 0 / 24px 24px,
-    #f3f1ec;
+    radial-gradient(circle at 16% 8%, rgba(224, 248, 235, 0.42), transparent 22rem),
+    radial-gradient(circle at 86% 12%, rgba(255, 255, 250, 0.7), transparent 20rem),
+    radial-gradient(circle, rgba(27, 28, 25, 0.035) 1px, transparent 1px) 0 0 / 24px 24px,
+    #e0f8eb;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
@@ -141,8 +143,10 @@ h2 {
   min-height: 100dvh;
   margin: 0 auto;
   overflow: hidden;
-  background: var(--background);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), var(--shadow-soft);
+  background:
+    linear-gradient(180deg, rgba(255, 254, 250, 0.84), rgba(224, 248, 235, 0.9)),
+    var(--background);
+  box-shadow: 0 0 0 1px rgba(0, 108, 81, 0.045), var(--shadow-soft);
 }
 
 .app-header {
@@ -155,7 +159,7 @@ h2 {
   gap: 8px;
   min-height: 66px;
   padding: max(10px, env(safe-area-inset-top)) 16px 10px;
-  background: rgba(251, 249, 244, 0.9);
+  background: rgba(224, 248, 235, 0.82);
   backdrop-filter: blur(18px) saturate(150%);
 }
 
@@ -233,15 +237,86 @@ h2 {
 }
 
 .today-progress {
+  position: relative;
+  overflow: hidden;
   display: grid;
   justify-items: center;
-  gap: 18px;
-  padding: 18px 10px 10px;
+  gap: 16px;
+  padding: 20px 14px 14px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(224, 248, 235, 0.14), transparent 10rem),
+    linear-gradient(180deg, rgba(255, 254, 250, 0.94), rgba(243, 253, 248, 0.76));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.86),
+    var(--shadow-card);
   text-align: center;
+}
+
+.today-progress::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(0, 108, 81, 0.045);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.today-progress::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.74) 0 38%, transparent 39%),
+    conic-gradient(from 120deg, rgba(224, 248, 235, 0.2), rgba(255, 174, 111, 0.07), rgba(118, 209, 175, 0.14), rgba(224, 248, 235, 0.2));
+  filter: blur(18px);
+  opacity: 0.44;
+  pointer-events: none;
 }
 
 .today-progress:hover {
   transform: translateY(-2px);
+}
+
+.progress-kicker,
+.progress-ring,
+#todayMessage,
+.progress-stats {
+  position: relative;
+  z-index: 1;
+}
+
+.progress-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 240px);
+  gap: 12px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.progress-kicker span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.progress-kicker span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--primary-mid);
+  box-shadow: 0 0 0 4px rgba(118, 209, 175, 0.18);
+}
+
+.progress-kicker strong {
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .progress-ring {
@@ -250,11 +325,34 @@ h2 {
   height: 156px;
 }
 
+.progress-ring::before,
+.progress-ring::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.progress-ring::before {
+  inset: 14px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.82), rgba(244, 249, 245, 0.46));
+  box-shadow:
+    inset 0 0 18px rgba(0, 108, 81, 0.055),
+    0 10px 22px rgba(0, 108, 81, 0.065);
+}
+
+.progress-ring::after {
+  inset: -5px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+}
+
 .progress-ring svg {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
-  filter: drop-shadow(0 12px 18px rgba(0, 108, 81, 0.11));
+  filter: drop-shadow(0 8px 14px rgba(0, 108, 81, 0.08));
 }
 
 .ring-bg,
@@ -264,11 +362,11 @@ h2 {
 }
 
 .ring-bg {
-  stroke: var(--surface-high);
+  stroke: rgba(217, 225, 220, 0.62);
 }
 
 .ring-value {
-  stroke: var(--primary-mid);
+  stroke: url("#ringGradient");
   stroke-linecap: round;
   stroke-dasharray: 314;
   stroke-dashoffset: 314;
@@ -278,9 +376,10 @@ h2 {
 .ring-center {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: grid;
   place-content: center;
-  gap: 2px;
+  gap: 4px;
 }
 
 .ring-center strong {
@@ -289,6 +388,8 @@ h2 {
   font-size: 32px;
   font-weight: 900;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.74);
 }
 
 .ring-center span,
@@ -302,6 +403,37 @@ h2 {
   max-width: 250px;
   font-weight: 500;
   line-height: 1.6;
+}
+
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 280px);
+  gap: 8px;
+}
+
+.progress-stats span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  min-height: 54px;
+  align-content: center;
+  border-radius: 16px;
+  background: rgba(255, 254, 250, 0.72);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow:
+    inset 0 0 0 1px rgba(217, 225, 220, 0.58),
+    0 10px 22px rgba(25, 54, 45, 0.05);
+}
+
+.progress-stats strong {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .section-head,
@@ -336,12 +468,12 @@ h2 {
 
 .habit-card {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) auto;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   min-height: 58px;
   padding: 10px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(0, 108, 81, 0.055);
   border-radius: 14px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
@@ -350,11 +482,22 @@ h2 {
 .habit-card:hover {
   border-color: rgba(0, 108, 81, 0.18);
   transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(25, 54, 45, 0.12);
+  box-shadow: 0 9px 20px rgba(25, 54, 45, 0.075);
 }
 
 .habit-card.is-done {
   background: linear-gradient(90deg, rgba(153, 244, 209, 0.22), var(--surface));
+}
+
+.habit-card.is-partial {
+  background: linear-gradient(90deg, rgba(255, 174, 111, 0.16), var(--surface));
+}
+
+.habit-actions {
+  display: grid;
+  grid-template-columns: 28px 16px;
+  align-items: center;
+  gap: 3px;
 }
 
 .check-button {
@@ -373,6 +516,32 @@ h2 {
 .check-button:hover {
   border-color: var(--primary);
   transform: scale(1.08);
+}
+
+.partial-button {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 28px;
+  border: 1px solid rgba(217, 225, 220, 0.9);
+  border-radius: 999px;
+  background: #fff;
+  color: rgba(97, 112, 105, 0.5);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.partial-button:hover {
+  border-color: var(--warm);
+  color: #a85d2a;
+  transform: scale(1.08);
+}
+
+.partial-button.is-partial {
+  border-color: var(--warm);
+  background: #fff3e6;
+  color: #a85d2a;
+  animation: checkPop 520ms var(--spring) both;
 }
 
 .check-button.is-done {
@@ -432,6 +601,11 @@ h2 {
   font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.chip.is-partial {
+  background: #fff3e6;
+  color: #a85d2a;
 }
 
 .toolbar {
@@ -787,8 +961,8 @@ textarea {
   width: min(100%, 390px);
   transform: translateX(-50%);
   padding: 8px 10px max(8px, env(safe-area-inset-bottom));
-  border-top: 1px solid rgba(217, 225, 220, 0.75);
-  background: rgba(251, 249, 244, 0.92);
+  border-top: 1px solid rgba(213, 231, 222, 0.85);
+  background: rgba(224, 248, 235, 0.88);
   backdrop-filter: blur(18px) saturate(150%);
 }
 
@@ -996,10 +1170,11 @@ textarea {
   body {
     padding: 36px 24px;
     background:
-      radial-gradient(circle at 15% 12%, rgba(118, 209, 175, 0.22), transparent 28rem),
-      radial-gradient(circle at 84% 10%, rgba(255, 174, 111, 0.16), transparent 26rem),
-      radial-gradient(circle, rgba(27, 28, 25, 0.07) 1px, transparent 1px) 0 0 / 24px 24px,
-      #f3f1ec;
+      radial-gradient(circle at 15% 12%, rgba(224, 248, 235, 0.42), transparent 28rem),
+      radial-gradient(circle at 84% 10%, rgba(255, 255, 250, 0.62), transparent 26rem),
+      radial-gradient(circle at 55% 86%, rgba(118, 209, 175, 0.1), transparent 28rem),
+      radial-gradient(circle, rgba(27, 28, 25, 0.035) 1px, transparent 1px) 0 0 / 24px 24px,
+      #e0f8eb;
   }
 
   .app-shell {
@@ -1015,7 +1190,7 @@ textarea {
     grid-template-columns: 44px minmax(0, 1fr) auto auto auto;
     min-height: 86px;
     padding: 22px 34px 16px 118px;
-    border-bottom: 1px solid rgba(217, 225, 220, 0.72);
+    border-bottom: 1px solid rgba(213, 231, 222, 0.78);
   }
 
   .back-button {
@@ -1043,21 +1218,32 @@ textarea {
   .bottom-nav {
     position: absolute;
     left: 24px;
-    top: 106px;
+    top: 122px;
     bottom: auto;
-    width: 70px;
+    width: 76px;
     transform: none;
     grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px;
-    border: 1px solid rgba(217, 225, 220, 0.75);
-    border-radius: 24px;
-    box-shadow: var(--shadow-card);
+    gap: 12px;
+    padding: 12px 10px;
+    border: 1px solid rgba(0, 108, 81, 0.07);
+    border-radius: 26px;
+    background: rgba(211, 244, 226, 0.9);
+    box-shadow: 0 9px 22px rgba(25, 54, 45, 0.06);
   }
 
   .nav-item {
-    min-height: 62px;
+    min-height: 66px;
     border-radius: 18px;
+    font-size: 11px;
+  }
+
+  .nav-item span {
+    font-size: 18px;
+  }
+
+  .nav-item.is-active span {
+    width: 28px;
+    height: 28px;
   }
 
   #todayView.view.is-visible {
@@ -1071,10 +1257,20 @@ textarea {
     grid-row: 1 / span 2;
     min-height: 520px;
     align-content: center;
-    padding: 28px;
+    padding: 30px 26px 34px;
     border-radius: 28px;
-    background: linear-gradient(180deg, rgba(255, 254, 250, 0.9), rgba(245, 243, 238, 0.78));
-    box-shadow: var(--shadow-card);
+    background:
+      radial-gradient(circle at 50% 39%, rgba(224, 248, 235, 0.14), transparent 15rem),
+      radial-gradient(circle at 18% 15%, rgba(255, 174, 111, 0.07), transparent 12rem),
+      linear-gradient(180deg, rgba(255, 254, 250, 0.94), rgba(243, 253, 248, 0.78));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 10px 26px rgba(25, 54, 45, 0.055);
+  }
+
+  #todayView .today-progress::after {
+    width: 310px;
+    height: 310px;
   }
 
   #todayView .section-head {
@@ -1087,6 +1283,10 @@ textarea {
     height: 210px;
   }
 
+  .progress-kicker {
+    width: min(100%, 290px);
+  }
+
   .ring-center strong {
     font-size: 42px;
   }
@@ -1094,6 +1294,10 @@ textarea {
   #todayMessage {
     max-width: 280px;
     font-size: 14px;
+  }
+
+  .progress-stats {
+    width: min(100%, 310px);
   }
 
   .habit-list {
@@ -1139,7 +1343,7 @@ textarea {
     margin: 8px auto 0;
     padding: 28px;
     border-radius: 28px;
-    background: rgba(255, 254, 250, 0.72);
+    background: rgba(255, 254, 250, 0.82);
     box-shadow: var(--shadow-card);
   }
 

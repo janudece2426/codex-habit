@@ -54,6 +54,7 @@ const seedState = {
     },
   ],
   completions: {},
+  partialCompletions: {},
 };
 
 let state = loadState();
@@ -92,6 +93,7 @@ function loadState() {
     return {
       habits: Array.isArray(parsed.habits) ? parsed.habits : seedState.habits,
       completions: parsed.completions || {},
+      partialCompletions: parsed.partialCompletions || {},
     };
   } catch {
     return seedState;
@@ -133,20 +135,59 @@ function getDoneSet(date = todayKey()) {
   return new Set(state.completions[date] || []);
 }
 
+function getPartialSet(date = todayKey()) {
+  return new Set(state.partialCompletions?.[date] || []);
+}
+
 function isDone(id, date = todayKey()) {
   return getDoneSet(date).has(id);
+}
+
+function isPartial(id, date = todayKey()) {
+  return getPartialSet(date).has(id);
+}
+
+function getHabitCredit(id, date = todayKey()) {
+  if (isDone(id, date)) return 1;
+  if (isPartial(id, date)) return 0.5;
+  return 0;
+}
+
+function getDayScore(date = todayKey()) {
+  return state.habits.reduce((sum, habit) => sum + getHabitCredit(habit.id, date), 0);
 }
 
 function toggleDone(id, sourceElement) {
   const date = todayKey();
   const done = getDoneSet(date);
+  const partial = getPartialSet(date);
   if (done.has(id)) {
     done.delete(id);
   } else {
     done.add(id);
+    partial.delete(id);
     celebrate(sourceElement);
   }
   state.completions[date] = Array.from(done);
+  state.partialCompletions[date] = Array.from(partial);
+  saveState();
+  render();
+}
+
+function togglePartial(id, sourceElement) {
+  const date = todayKey();
+  const done = getDoneSet(date);
+  const partial = getPartialSet(date);
+  if (partial.has(id)) {
+    partial.delete(id);
+  } else {
+    partial.add(id);
+    done.delete(id);
+    showToast("좋아. 반만큼 해낸 것도 기록했어요.");
+    createBurst(sourceElement, 8);
+  }
+  state.completions[date] = Array.from(done);
+  state.partialCompletions[date] = Array.from(partial);
   saveState();
   render();
 }
@@ -154,12 +195,19 @@ function toggleDone(id, sourceElement) {
 function renderToday() {
   const list = $("#todayList");
   const total = state.habits.length;
-  const done = getDoneSet().size;
-  const percent = total ? Math.round((done / total) * 100) : 0;
+  const score = getDayScore();
+  const doneCount = state.habits.filter((habit) => isDone(habit.id)).length;
+  const partialCount = state.habits.filter((habit) => isPartial(habit.id)).length;
+  const remainingCount = Math.max(0, total - doneCount - partialCount);
+  const percent = total ? Math.round((score / total) * 100) : 0;
 
   $("#todayPercent").textContent = `${percent}%`;
   $("#ringText").textContent = `${percent}%`;
   $("#ringValue").style.strokeDashoffset = String(314 - (314 * percent) / 100);
+  $("#todayScoreText").textContent = `${formatScore(score)} / ${total}`;
+  $("#doneCountText").textContent = doneCount;
+  $("#partialCountText").textContent = partialCount;
+  $("#remainingCountText").textContent = remainingCount;
   $("#todayMessage").textContent =
     percent === 100
       ? "오늘의 작은 조각을 모두 맞췄어요."
@@ -195,9 +243,14 @@ function renderHabits() {
 
 function habitCardTemplate(habit, compact) {
   const done = isDone(habit.id);
+  const partial = isPartial(habit.id);
+  const status = done ? "완료" : partial ? "반달성" : "대기";
   return `
-    <article class="habit-card ${done ? "is-done" : ""}">
-      <button class="check-button ${done ? "is-done" : ""}" type="button" data-action="toggle" data-id="${habit.id}" aria-label="${habit.name} 완료">✓</button>
+    <article class="habit-card ${done ? "is-done" : ""} ${partial ? "is-partial" : ""}">
+      <div class="habit-actions">
+        <button class="check-button ${done ? "is-done" : ""}" type="button" data-action="toggle" data-id="${habit.id}" aria-label="${habit.name} 완료">✓</button>
+        <button class="partial-button ${partial ? "is-partial" : ""}" type="button" data-action="partial" data-id="${habit.id}" aria-label="${habit.name} 반달성">◐</button>
+      </div>
       <div>
         <span class="habit-icon">${categorySymbols[habit.category] || "•"}</span>
         <button class="text-button habit-title" type="button" data-action="detail" data-id="${habit.id}">${escapeHtml(habit.name)}</button>
@@ -205,7 +258,7 @@ function habitCardTemplate(habit, compact) {
       </div>
       ${
         compact
-          ? `<span class="chip">${done ? "완료" : "대기"}</span>`
+          ? `<span class="chip ${partial ? "is-partial" : ""}">${status}</span>`
           : `<button class="icon-button" type="button" data-action="edit" data-id="${habit.id}" aria-label="수정">수정</button>`
       }
     </article>
@@ -229,7 +282,7 @@ function renderDetail() {
           <p class="eyebrow">${categoryLabels[habit.category]} · ${habit.time}</p>
           <h2>${escapeHtml(habit.name)}</h2>
         </div>
-        <span class="chip">${isDone(habit.id) ? "오늘 완료" : "오늘 대기"}</span>
+        <span class="chip ${isPartial(habit.id) ? "is-partial" : ""}">${isDone(habit.id) ? "오늘 완료" : isPartial(habit.id) ? "오늘 반달성" : "오늘 대기"}</span>
       </div>
       <p>${escapeHtml(habit.micro)}</p>
       <ul class="step-list">
@@ -244,6 +297,7 @@ function renderDetail() {
         <button class="secondary-button" type="button" data-view-target="habits">목록</button>
         <button class="secondary-button" type="button" data-action="edit" data-id="${habit.id}">수정</button>
         <button class="danger-button" type="button" data-action="delete" data-id="${habit.id}">삭제</button>
+        <button class="secondary-button" type="button" data-action="partial" data-id="${habit.id}">${isPartial(habit.id) ? "반달성 취소" : "반만 달성"}</button>
         <button class="primary-button" type="button" data-action="toggle" data-id="${habit.id}">${isDone(habit.id) ? "완료 취소" : "오늘 완료"}</button>
       </div>
     </article>
@@ -251,20 +305,21 @@ function renderDetail() {
 }
 
 function renderStats() {
-  const total = Object.values(state.completions).reduce((sum, ids) => sum + ids.length, 0);
+  const dates = new Set([...Object.keys(state.completions), ...Object.keys(state.partialCompletions || {})]);
+  const total = Array.from(dates).reduce((sum, date) => sum + getDayScore(date), 0);
   $("#streakStat").textContent = `${getStreak()}일`;
-  $("#totalStat").textContent = `${total}회`;
+  $("#totalStat").textContent = `${formatScore(total)}점`;
   $("#habitStat").textContent = `${state.habits.length}개`;
 
   const days = getLastSevenDays();
   const max = Math.max(1, state.habits.length);
   $("#weekChart").innerHTML = days
     .map(({ key, label }) => {
-      const count = (state.completions[key] || []).length;
+      const count = getDayScore(key);
       const height = 18 + (count / max) * 150;
       return `
         <div class="bar-wrap">
-          <div class="bar" style="height:${height}px" title="${label} ${count}개"></div>
+          <div class="bar" style="height:${height}px" title="${label} ${formatScore(count)}점"></div>
           <span class="bar-label">${label}</span>
         </div>
       `;
@@ -291,7 +346,7 @@ function getStreak() {
     const date = new Date();
     date.setDate(date.getDate() - offset);
     const key = dateKey(date);
-    if ((state.completions[key] || []).length >= total) streak += 1;
+    if (getDayScore(key) >= total) streak += 1;
     else break;
   }
   return streak;
@@ -325,6 +380,9 @@ function deleteHabit(id) {
   state.habits = state.habits.filter((item) => item.id !== id);
   Object.keys(state.completions).forEach((date) => {
     state.completions[date] = state.completions[date].filter((habitId) => habitId !== id);
+  });
+  Object.keys(state.partialCompletions || {}).forEach((date) => {
+    state.partialCompletions[date] = state.partialCompletions[date].filter((habitId) => habitId !== id);
   });
   saveState();
   selectedHabitId = null;
@@ -406,6 +464,8 @@ function normalizeRemotePayload(payload) {
   return {
     habits: Array.isArray(payload?.habits) ? payload.habits : [],
     completions: payload?.completions && typeof payload.completions === "object" ? payload.completions : {},
+    partialCompletions:
+      payload?.partialCompletions && typeof payload.partialCompletions === "object" ? payload.partialCompletions : {},
   };
 }
 
@@ -552,15 +612,15 @@ function celebrate(sourceElement) {
   showToast("좋아요. 오늘의 작은 조각 하나 완료");
 }
 
-function createBurst(sourceElement) {
+function createBurst(sourceElement, particleCount = 16) {
   const rect = sourceElement?.getBoundingClientRect();
   const originX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
   const originY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
   const colors = ["#cc785c", "#5db8a6", "#e8a55a", "#5db872"];
 
-  Array.from({ length: 16 }, (_, index) => {
+  Array.from({ length: particleCount }, (_, index) => {
     const particle = document.createElement("span");
-    const angle = (Math.PI * 2 * index) / 16;
+    const angle = (Math.PI * 2 * index) / particleCount;
     const distance = 42 + Math.random() * 46;
     particle.className = "burst-particle";
     particle.style.left = `${originX}px`;
@@ -572,6 +632,10 @@ function createBurst(sourceElement) {
     window.setTimeout(() => particle.remove(), 760);
     return particle;
   });
+}
+
+function formatScore(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
 function escapeHtml(value) {
@@ -596,6 +660,7 @@ document.addEventListener("click", (event) => {
   if (!actionButton) return;
   const { action, id } = actionButton.dataset;
   if (action === "toggle") toggleDone(id, actionButton);
+  if (action === "partial") togglePartial(id, actionButton);
   if (action === "detail") {
     selectedHabitId = id;
     setView("detail");

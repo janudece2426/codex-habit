@@ -29,8 +29,19 @@
       <main class="main-panel" id="mainContent">
         <section id="todayView" class="view is-visible" aria-labelledby="viewTitle">
           <div class="today-progress">
+            <div class="progress-kicker">
+              <span>오늘 점수판</span>
+              <strong id="todayScoreText">0 / 0</strong>
+            </div>
             <div class="progress-ring" aria-label="오늘 진행률">
               <svg viewBox="0 0 120 120">
+                <defs>
+                  <linearGradient id="ringGradient" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#99f4d1"></stop>
+                    <stop offset="58%" stop-color="#55c79d"></stop>
+                    <stop offset="100%" stop-color="#006c51"></stop>
+                  </linearGradient>
+                </defs>
                 <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
                 <circle class="ring-value" id="ringValue" cx="60" cy="60" r="50"></circle>
               </svg>
@@ -41,6 +52,11 @@
             </div>
             <strong id="todayPercent" class="sr-only">0%</strong>
             <p id="todayMessage">작은 시작을 기다리고 있어요.</p>
+            <div class="progress-stats" aria-label="오늘 달성 요약">
+              <span><strong id="doneCountText">0</strong> 완료</span>
+              <span><strong id="partialCountText">0</strong> 반달성</span>
+              <span><strong id="remainingCountText">0</strong> 남음</span>
+            </div>
           </div>
 
           <div class="section-head">
@@ -142,7 +158,7 @@
               <strong id="streakStat">0일</strong>
             </article>
             <article class="stat-card green">
-              <span>전체 완료</span>
+              <span>전체 점수</span>
               <strong id="totalStat">0회</strong>
             </article>
             <article class="stat-card">
