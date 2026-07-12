@@ -916,11 +916,16 @@ textarea {
   color: var(--secondary);
 }
 
-.week-chart {
+.growth-chip.is-negative {
+  background: #fff0ed;
+  color: #b94b3d;
+}
+
+.month-chart {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(var(--month-days, 31), minmax(12px, 1fr));
   align-items: end;
-  gap: 8px;
+  gap: 4px;
   min-height: 160px;
 }
 
@@ -938,6 +943,38 @@ textarea {
   background: linear-gradient(180deg, var(--primary-mid), var(--primary));
   transform-origin: bottom;
   animation: barRise 620ms var(--spring) both;
+}
+
+.month-chart .bar {
+  max-width: 16px;
+}
+
+.bar-wrap.is-today .bar {
+  box-shadow: 0 0 0 3px rgba(0, 119, 86, 0.15);
+}
+
+.bar-wrap.is-future .bar {
+  background: #e3ece7;
+  animation: none;
+}
+
+.month-chart .bar-label {
+  opacity: 0;
+}
+
+.month-chart .bar-wrap.is-five-day-mark .bar-label,
+.month-chart .bar-wrap.is-today .bar-label {
+  opacity: 1;
+}
+
+.month-chart .bar-wrap.is-five-day-mark .bar-label {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.month-chart .bar-wrap.is-today .bar-label {
+  color: var(--primary);
 }
 
 .bar-wrap:nth-child(3) .bar,
@@ -1318,7 +1355,7 @@ textarea {
   }
 
   #statsView.view.is-visible {
-    grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+    grid-template-columns: minmax(300px, 0.78fr) minmax(420px, 1.22fr);
     align-items: start;
   }
 
@@ -1330,7 +1367,7 @@ textarea {
     min-height: 360px;
   }
 
-  .week-chart {
+  .month-chart {
     min-height: 250px;
   }
 

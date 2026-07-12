@@ -311,31 +311,59 @@ function renderStats() {
   $("#totalStat").textContent = `${formatScore(total)}점`;
   $("#habitStat").textContent = `${state.habits.length}개`;
 
-  const days = getLastSevenDays();
+  const { days, year, month } = getCurrentMonthDays();
   const max = Math.max(1, state.habits.length);
-  $("#weekChart").innerHTML = days
-    .map(({ key, label }) => {
+  $("#monthChartTitle").textContent = `${month}월 흐름`;
+  $("#monthChart").style.setProperty("--month-days", days.length);
+  $("#monthChart").innerHTML = days
+    .map(({ key, label, isToday, isFuture }) => {
       const count = getDayScore(key);
-      const height = 18 + (count / max) * 150;
+      const height = isFuture ? 8 : 18 + (count / max) * 150;
+      const isFiveDayMark = label % 5 === 0;
       return `
-        <div class="bar-wrap">
-          <div class="bar" style="height:${height}px" title="${label} ${formatScore(count)}점"></div>
+        <div class="bar-wrap ${isToday ? "is-today" : ""} ${isFuture ? "is-future" : ""} ${isFiveDayMark ? "is-five-day-mark" : ""}">
+          <div class="bar" style="height:${height}px" title="${month}월 ${label}일 ${formatScore(count)}점"></div>
           <span class="bar-label">${label}</span>
         </div>
       `;
     })
     .join("");
+
+  const elapsedDays = days.filter(({ isFuture }) => !isFuture);
+  const currentScore = elapsedDays.reduce((sum, { key }) => sum + getDayScore(key), 0);
+  const previousScore = getPreviousMonthScore(year, month, elapsedDays.length);
+  const growth = previousScore ? Math.round(((currentScore - previousScore) / previousScore) * 100) : null;
+  const growthElement = $("#monthlyGrowth");
+  growthElement.textContent = growth === null ? "지난달 기록 없음" : `${growth >= 0 ? "+" : ""}${growth}%`;
+  growthElement.classList.toggle("is-negative", growth !== null && growth < 0);
 }
 
-function getLastSevenDays() {
-  return Array.from({ length: 7 }, (_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (6 - index));
-    return {
-      key: dateKey(date),
-      label: new Intl.DateTimeFormat("ko-KR", { weekday: "short" }).format(date),
-    };
-  });
+function getCurrentMonthDays() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const todayDate = today.getDate();
+  const dayCount = new Date(year, month, 0).getDate();
+  return {
+    year,
+    month,
+    days: Array.from({ length: dayCount }, (_, index) => {
+      const date = new Date(year, month - 1, index + 1);
+      return {
+        key: dateKey(date),
+        label: index + 1,
+        isToday: index + 1 === todayDate,
+        isFuture: index + 1 > todayDate,
+      };
+    }),
+  };
+}
+
+function getPreviousMonthScore(year, month, dayCount) {
+  return Array.from({ length: dayCount }, (_, index) => {
+    const date = new Date(year, month - 2, index + 1);
+    return date.getMonth() === (month + 10) % 12 ? getDayScore(dateKey(date)) : 0;
+  }).reduce((sum, score) => sum + score, 0);
 }
 
 function getStreak() {
