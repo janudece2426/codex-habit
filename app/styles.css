@@ -1,24 +1,28 @@
 :root {
   color-scheme: light;
-  --background: #e0f8eb;
-  --surface: #fffefa;
-  --surface-low: #f6f6f0;
-  --surface-mid: #edf6f1;
-  --surface-high: #e2eee8;
+  --background: #f3f4f2;
+  --surface: #ffffff;
+  --surface-low: #f5f3ee;
+  --surface-mid: #f0eee9;
+  --surface-high: #eae8e3;
   --primary: #006c51;
   --primary-soft: #99f4d1;
   --primary-mid: #76d1af;
   --primary-deep: #004b3a;
   --secondary: #416182;
   --warm: #ffae6f;
+  --yellow: #ffe254;
+  --yellow-soft: #fff6c9;
+  --sky: #c9ecff;
+  --mint: #2ecfbd;
   --text: #1b1c19;
-  --muted: #617069;
-  --line: #d5e7de;
+  --muted: #3e4944;
+  --line: #e4e2dd;
   --danger: #b64040;
   --font-display: "Plus Jakarta Sans", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --font-body: "Be Vietnam Pro", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
-  --shadow-soft: 0 14px 36px rgba(22, 45, 37, 0.07);
-  --shadow-card: 0 7px 18px rgba(25, 54, 45, 0.055);
+  --shadow-soft: 0 20px 60px rgba(27, 28, 25, 0.08);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
   --spring: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -34,11 +38,7 @@ html {
 body {
   min-height: 100%;
   margin: 0;
-  background:
-    radial-gradient(circle at 16% 8%, rgba(224, 248, 235, 0.42), transparent 22rem),
-    radial-gradient(circle at 86% 12%, rgba(255, 255, 250, 0.7), transparent 20rem),
-    radial-gradient(circle, rgba(27, 28, 25, 0.035) 1px, transparent 1px) 0 0 / 24px 24px,
-    #e0f8eb;
+  background: #eceeeb;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
@@ -143,9 +143,7 @@ h2 {
   min-height: 100dvh;
   margin: 0 auto;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 254, 250, 0.84), rgba(224, 248, 235, 0.9)),
-    var(--background);
+  background: var(--background);
   box-shadow: 0 0 0 1px rgba(0, 108, 81, 0.045), var(--shadow-soft);
 }
 
@@ -159,7 +157,7 @@ h2 {
   gap: 8px;
   min-height: 66px;
   padding: max(10px, env(safe-area-inset-top)) 16px 10px;
-  background: rgba(224, 248, 235, 0.82);
+  background: rgba(243, 244, 242, 0.92);
   backdrop-filter: blur(18px) saturate(150%);
 }
 
@@ -468,7 +466,7 @@ h2 {
 
 .habit-card {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) auto;
+  grid-template-columns: 66px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   min-height: 58px;
@@ -494,10 +492,9 @@ h2 {
 }
 
 .habit-actions {
-  display: grid;
-  grid-template-columns: 28px 16px;
+  display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 7px;
 }
 
 .check-button {
@@ -505,10 +502,10 @@ h2 {
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--line);
+  border: 2px solid #aeb8b3;
   border-radius: 999px;
   background: #fff;
-  color: transparent;
+  color: #87928d;
   font-size: 13px;
   font-weight: 900;
 }
@@ -521,12 +518,12 @@ h2 {
 .partial-button {
   display: grid;
   place-items: center;
-  width: 16px;
+  width: 28px;
   height: 28px;
-  border: 1px solid rgba(217, 225, 220, 0.9);
+  border: 2px solid #aeb8b3;
   border-radius: 999px;
   background: #fff;
-  color: rgba(97, 112, 105, 0.5);
+  color: #68756f;
   font-size: 11px;
   font-weight: 900;
 }
@@ -560,6 +557,23 @@ h2 {
   background: var(--surface-low);
   color: var(--primary);
   font-size: 15px;
+}
+
+.habit-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.habit-heading .habit-icon {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  background: #e5f6f1;
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .habit-title {
@@ -1418,5 +1432,221 @@ textarea {
     animation-duration: 1ms !important;
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
+  }
+}
+
+/* Stitch soft-minimal visual sync — layout and behavior remain unchanged. */
+.today-progress {
+  background: var(--surface);
+  border: 0;
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.today-progress::before,
+.today-progress::after {
+  display: none;
+}
+
+.habit-card,
+.stat-card,
+.detail-card,
+.chart-panel,
+.form-panel,
+.empty-state {
+  border-color: transparent;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.habit-card {
+  min-height: 64px;
+  border-radius: 12px;
+}
+
+.habit-card.is-done {
+  background: var(--surface);
+}
+
+.habit-card.is-partial {
+  background: linear-gradient(90deg, rgba(255, 174, 111, 0.12), var(--surface) 42%);
+}
+
+.check-button,
+.partial-button {
+  background: var(--surface);
+}
+
+.check-button.is-done {
+  background: var(--primary);
+  color: var(--surface);
+}
+
+input,
+select,
+textarea,
+.search-box {
+  border-color: transparent;
+  background: var(--surface-mid);
+  box-shadow: none;
+}
+
+.primary-button {
+  min-height: 52px;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 6px 14px rgba(0, 108, 81, 0.18);
+}
+
+.secondary-button {
+  border-color: var(--line);
+  background: var(--surface);
+}
+
+.category-field label > span {
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.bottom-nav {
+  border-top: 1px solid rgba(228, 226, 221, 0.7);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -8px 28px rgba(27, 28, 25, 0.04);
+}
+
+.nav-item.is-active span {
+  background: rgba(153, 244, 209, 0.5);
+}
+
+@media (min-width: 900px) {
+  body {
+    background: #f1f0ed;
+  }
+
+  .app-shell {
+    background: var(--background);
+  }
+
+  .app-header {
+    border-bottom-color: rgba(228, 226, 221, 0.75);
+    background: rgba(251, 249, 244, 0.94);
+  }
+
+  .bottom-nav {
+    border-color: rgba(228, 226, 221, 0.8);
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  #todayView .today-progress {
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .form-panel {
+    background: var(--background);
+    box-shadow: none;
+  }
+}
+
+/* Brighter accent cards from the latest Stitch board. */
+.today-progress {
+  background: linear-gradient(145deg, #ffffff 58%, #effcf9 100%);
+}
+
+.progress-kicker span {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #d9f8f1;
+  color: var(--primary);
+}
+
+.progress-stats span:nth-child(1) {
+  background: var(--yellow);
+  color: #574700;
+}
+
+.progress-stats span:nth-child(2) {
+  background: var(--sky);
+  color: #174c63;
+}
+
+.progress-stats span:nth-child(3) {
+  background: #72ead7;
+  color: #004c40;
+}
+
+.progress-stats span:nth-child(1) strong,
+.progress-stats span:nth-child(2) strong,
+.progress-stats span:nth-child(3) strong {
+  color: currentColor;
+}
+
+.habit-card:nth-child(3n + 2) .habit-actions {
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--yellow-soft);
+}
+
+.habit-card:nth-child(3n + 3) .habit-actions {
+  padding: 5px;
+  border-radius: 12px;
+  background: #e5e7e4;
+}
+
+.habit-card.is-done {
+  background: linear-gradient(90deg, rgba(46, 207, 189, 0.14), var(--surface) 42%);
+}
+
+.stat-card.warm {
+  background: var(--yellow);
+  color: #3c3300;
+}
+
+.stat-card.warm span,
+.stat-card.warm strong {
+  color: #3c3300;
+}
+
+.stats-grid .stat-card:not(.warm):not(.green) {
+  background: var(--sky);
+}
+
+.growth-chip {
+  background: var(--sky);
+}
+
+.nav-item.is-active span {
+  background: var(--mint);
+  color: #003c34;
+}
+
+@media (min-width: 900px) {
+  #todayView .today-progress {
+    background: linear-gradient(145deg, #ffffff 58%, #effcf9 100%);
+  }
+}
+
+/* Readability pass for habit controls and labels. */
+.habit-card:nth-child(3n + 2) .habit-actions,
+.habit-card:nth-child(3n + 3) .habit-actions {
+  padding: 4px;
+}
+
+.habit-heading {
+  min-width: 0;
+}
+
+.habit-heading .habit-title {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  body {
+    background: #eceeeb;
+  }
+
+  .app-header {
+    background: rgba(243, 244, 242, 0.95);
   }
 }

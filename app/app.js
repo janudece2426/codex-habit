@@ -252,8 +252,10 @@ function habitCardTemplate(habit, compact) {
         <button class="partial-button ${partial ? "is-partial" : ""}" type="button" data-action="partial" data-id="${habit.id}" aria-label="${habit.name} 반달성">◐</button>
       </div>
       <div>
-        <span class="habit-icon">${categorySymbols[habit.category] || "•"}</span>
-        <button class="text-button habit-title" type="button" data-action="detail" data-id="${habit.id}">${escapeHtml(habit.name)}</button>
+        <div class="habit-heading">
+          <span class="habit-icon">${categorySymbols[habit.category] || "•"}</span>
+          <button class="text-button habit-title" type="button" data-action="detail" data-id="${habit.id}">${escapeHtml(habit.name)}</button>
+        </div>
         <div class="habit-meta">${habit.time} · ${categoryLabels[habit.category]} · ${escapeHtml(habit.micro)}</div>
       </div>
       ${
