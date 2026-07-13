@@ -193,6 +193,10 @@ h2 {
   font-size: 11px;
 }
 
+#syncButton[hidden] {
+  display: none;
+}
+
 .sync-trigger.is-connected {
   background: var(--primary-soft);
   color: var(--primary);
